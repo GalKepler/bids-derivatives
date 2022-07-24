@@ -1,4 +1,4 @@
-name: build
+name: Workflow for incoming changes
 on: [push, pull_request]
 jobs:
   test:
