@@ -1,47 +1,95 @@
-name: CI
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-  workflow_dispatch:
-
+name: build
+on: [push, pull_request]
 jobs:
-  tests:
+  test:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9, "3.10"]
-        os: [ubuntu-latest, macos-latest, windows-latest]
-    name: "Python ${{ matrix.python-version }} on ${{ matrix.os }}"
-    env:
-      USING_COVERAGE: "3.8"
-    runs-on: ${{ matrix.os }}
+        include:
+          - name: "check"
+            python: "3.9"
+            toxpython: "python3.9"
+            tox_env: "check"
+            os: "ubuntu-latest"
+          - name: "codecov"
+            python: "3.9"
+            toxpython: "python3.9"
+            tox_env: "check"
+            os: "ubuntu-latest"
+          - name: "py38 (ubuntu)"
+            python: "3.8"
+            toxpython: "python3.8"
+            python_arch: "x64"
+            tox_env: "py38"
+            os: "ubuntu-latest"
+          - name: "py38 (windows)"
+            python: "3.8"
+            toxpython: "python3.8"
+            python_arch: "x64"
+            tox_env: "py38"
+            os: "windows-latest"
+          - name: "py38 (macos)"
+            python: "3.8"
+            toxpython: "python3.8"
+            python_arch: "x64"
+            tox_env: "py38"
+            os: "macos-latest"
+          - name: "py39 (ubuntu)"
+            python: "3.9"
+            toxpython: "python3.9"
+            python_arch: "x64"
+            tox_env: "py39"
+            os: "ubuntu-latest"
+          - name: "py39 (windows)"
+            python: "3.9"
+            toxpython: "python3.9"
+            python_arch: "x64"
+            tox_env: "py39"
+            os: "windows-latest"
+          - name: "py39 (macos)"
+            python: "3.9"
+            toxpython: "python3.9"
+            python_arch: "x64"
+            tox_env: "py39"
+            os: "macos-latest"
+          - name: "py310 (ubuntu)"
+            python: "3.10"
+            toxpython: "python3.10"
+            python_arch: "x64"
+            tox_env: "py310"
+            os: "ubuntu-latest"
+          - name: "py310 (windows)"
+            python: "3.10"
+            toxpython: "python3.10"
+            python_arch: "x64"
+            tox_env: "py310"
+            os: "windows-latest"
+          - name: "py310 (macos)"
+            python: "3.10"
+            toxpython: "python3.10"
+            python_arch: "x64"
+            tox_env: "py310"
+            os: "macos-latest"
     steps:
       - uses: actions/checkout@v2
-      - name: "Set up Python ${{ matrix.python-version }}"
-        uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install libmagic (Linux)
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          # Required for testing DICOM file generation by mime type
-          sudo apt update
-          sudo apt install -y libmagic1
-      - name: Install libmagic (macOS)
-        if: matrix.os == 'macos-latest'
-        run: brew install libmagic
-      - name: Install dependencies
-        run: |
-          python -m site
-          python -m pip install -U pip coverage setuptools wheel tox-gh-actions
-      - name: "Run tox targets for ${{ matrix.python-version }}"
-        run: python -m tox
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
-        if: "contains(env.USING_COVERAGE, matrix.python-version)"
+          fetch-depth: 0
+      - uses: actions/setup-python@v2
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
+          python-version: ${{ matrix.python }}
+          architecture: ${{ matrix.python_arch }}
+      - name: install dependencies
+        run: |
+          python -mpip install --progress-bar=off -r ci/requirements.txt
+          virtualenv --version
+          pip --version
+          tox --version
+          pip list --format=freeze
+      - name: test
+        env:
+          TOXPYTHON: "${{ matrix.toxpython }}"
+        run: >
+          tox -e ${{ matrix.tox_env }} -v
