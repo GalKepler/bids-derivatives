@@ -9,15 +9,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: "check"
+          - name: "Check installation and styling"
             python: "3.9"
             toxpython: "python3.9"
             tox_env: "check"
             os: "ubuntu-latest"
-          - name: "codecov"
+          - name: "Collect coverage"
             python: "3.9"
             toxpython: "python3.9"
-            tox_env: "check"
+            tox_env: "codecov"
             os: "ubuntu-latest"
           - name: "py38 (ubuntu)"
             python: "3.8"
