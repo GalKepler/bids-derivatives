@@ -105,12 +105,8 @@ jobs:
           pip --version
           tox --version
           pip list --format=freeze
-      - name: Test and generate report
-        env:
-          TOXPYTHON: "${{ matrix.toxpython }}"
-        run: |
-          pip install coverage
-          coverage run -m tox -e ${{ matrix.tox_env }}
+      - name: "Run tox targets for ${{ matrix.python }}"
+        run: python -m tox
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
