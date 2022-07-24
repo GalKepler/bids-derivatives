@@ -109,7 +109,8 @@ jobs:
         env:
           TOXPYTHON: "${{ matrix.toxpython }}"
         run: python -m tox -e ${{ matrix.tox_env }}
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+      - name: Upload coverage reports to Codecov
+        run: |
+          curl -Os https://uploader.codecov.io/latest/linux/codecov
+          chmod +x codecov
+          ./codecov -t ${{ secrets.CODECOV_TOKEN }}
