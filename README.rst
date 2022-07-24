@@ -19,13 +19,13 @@ Overview
     :target: https://bids_derivatives.readthedocs.io/
     :alt: Documentation Status
 
-.. |github-actions| image:: https://github.com/GalBenZvi/bids_derivatives/actions/workflows/github-actions.yml/badge.svg
+.. |github-actions| image:: https://github.com/GalBenZvi/bids-derivatives/actions/workflows/github-actions.yml/badge.svg
     :alt: GitHub Actions Build Status
-    :target: https://github.com/GalBenZvi/bids_derivatives/actions
+    :target: https://github.com/GalBenZvi/bids-derivatives/actions
 
-.. |requires| image:: https://requires.io/github/GalBenZvi/bids_derivatives/requirements.svg?branch=main
+.. |requires| image:: https://requires.io/github/GalBenZvi/bids-derivatives/requirements.svg?branch=main
     :alt: Requirements Status
-    :target: https://requires.io/github/GalBenZvi/bids_derivatives/requirements/?branch=main
+    :target: https://requires.io/github/GalBenZvi/bids-derivatives/requirements/?branch=main
 
 .. |codecov| image:: https://codecov.io/gh/GalBenZvi/bids_derivatives/branch/main/graphs/badge.svg?branch=main
     :alt: Coverage Status
