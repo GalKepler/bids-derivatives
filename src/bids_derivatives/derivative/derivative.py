@@ -1,4 +1,3 @@
-import warnings
 from pathlib import Path
 from typing import Union
 
@@ -19,15 +18,26 @@ class SingleSubjectDerivative:
     def __init__(
         self, base_dir: Union[str, Path], participant_label: str = None
     ):
-        (
-            self.base_dir,
-            self.participant_label,
-        ) = self.validate_participant_label(Path(base_dir), participant_label)
+        self.participant_label = self.validate_participant_label(
+            participant_label
+        )
+        self.path = self.validate_base_dir(base_dir)
 
-    @staticmethod
-    def validate_participant_label(
-        base_dir: Path, participant_label: str = None
-    ):
+    def validate_participant_label(self, participant_label: str):
+        """
+        Validate the participant label.
+        """
+        if participant_label is not None:
+            parser = parse.parse(
+                SingleSubjectDerivative.SUBJECT_TEMPLATE, participant_label
+            )
+            if parser:
+                participant_label = parser.named.get("subject")
+            else:
+                pass  # Keep participant label as is.
+        return participant_label
+
+    def validate_base_dir(self, base_dir: Union[Path, str]):
         """
         Validate the participant label from either a subject-specific directory
         or a specified label.
@@ -49,29 +59,24 @@ class SingleSubjectDerivative:
         ValueError
             _description_
         """
-        if participant_label is not None:
-            parser = parse.parse(
-                SingleSubjectDerivative.SUBJECT_TEMPLATE, participant_label
-            )
-            if parser:
-                participant_label = parser.named.get("subject")
-            else:
-                pass  # Keep participant label as is.
+        base_dir = Path(base_dir)
         base_dir_name = base_dir.name
         parser = parse.parse(
             SingleSubjectDerivative.SUBJECT_TEMPLATE, base_dir_name
         )
         if parser:
             base_dir = base_dir.parent
-            if not participant_label:
+            if parser:
                 participant_label = parser.named.get("subject")
-            else:
-                if participant_label != parser.named.get("subject"):
-                    warnings.warn(
-                        PARTICIPANT_MISMATCH.format(
-                            participant_label=participant_label,
-                            base_dir_name=base_dir_name,
+                if self.participant_label is not None:
+                    if self.participant_label != participant_label:
+                        raise ValueError(
+                            PARTICIPANT_MISMATCH.format(
+                                participant_label=self.participant_label,
+                                base_dir_name=participant_label,
+                            )
                         )
-                    )
+                else:
+                    self.participant_label = parser.named.get("subject")
 
-        return base_dir, participant_label
+        return base_dir
