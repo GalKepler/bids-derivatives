@@ -17,6 +17,7 @@ class SingleSubjectDerivative:
 
     #: Template
     SUBJECT_TEMPLATE = "sub-{subject}"
+    SESSION_TEMPLATE = "ses-{session}"
 
     def __init__(
         self,
@@ -104,9 +105,34 @@ class SingleSubjectDerivative:
 
         return base_dir
 
+    def get_available_sessions(self):
+        """
+        Query the participant's derivatives directory for available sessions.
+        """
+        sessions = []
+        for session in self.path.iterdir():
+            parser = parse.parse(self.SESSION_TEMPLATE, session.name)
+            if parser:
+                sessions.append(parser.named.get("session"))
+        return list(set(sessions))
+
     @property
     def path(self):
         """
         Get the path to the participant's derivatives directory.
         """
         return self.get_participant_path()
+
+    @property
+    def analysis_title(self) -> str:
+        """
+        Get the analysis title.
+        """
+        return self.base_directory.name
+
+    @property
+    def sessions(self):
+        """
+        Get the available sessions.
+        """
+        return self.get_available_sessions()
