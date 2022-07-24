@@ -112,7 +112,5 @@ jobs:
           tox -e ${{ matrix.tox_env }} -v
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
-        if: "contains(env.USING_COVERAGE, matrix.python-version)"
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
