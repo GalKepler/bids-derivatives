@@ -88,8 +88,14 @@ jobs:
           pip --version
           tox --version
           pip list --format=freeze
-      - name: test
+      - name: Run tests
         env:
           TOXPYTHON: "${{ matrix.toxpython }}"
         run: >
           tox -e ${{ matrix.tox_env }} -v
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        if: matrix.tox_env == codecov
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
