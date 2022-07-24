@@ -108,7 +108,7 @@ jobs:
           tox -e ${{ matrix.tox_env }} -v
 
       - name: Run tests and collect coverage
-        run: pytest --cov app
+        run: pytest --cov .
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
