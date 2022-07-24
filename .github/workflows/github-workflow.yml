@@ -95,7 +95,7 @@ jobs:
           tox -e ${{ matrix.tox_env }} -v
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
-        if: matrix.tox_env == codecov
+        if: matrix.tox_env == 'codecov'
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
