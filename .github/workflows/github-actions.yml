@@ -113,3 +113,5 @@ jobs:
           coverage run -m tox -e ${{ matrix.tox_env }}
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
