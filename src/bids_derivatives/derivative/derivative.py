@@ -28,7 +28,7 @@ class SingleSubjectDerivative:
         self.participant_label = self.validate_participant_label(
             participant_label
         )
-        self.base_directory = self.validate_base_dir(base_dir)
+        self.base_directory = self.validate_base_directory(base_dir)
         self.exists = exists
 
     def get_participant_path(self):
@@ -61,7 +61,7 @@ class SingleSubjectDerivative:
                 pass  # Keep participant label as is.
         return participant_label
 
-    def validate_base_dir(self, base_dir: Union[Path, str]):
+    def validate_base_directory(self, base_dir: Union[Path, str]):
         """
         Validate the participant label from either a subject-specific directory
         or a specified label.

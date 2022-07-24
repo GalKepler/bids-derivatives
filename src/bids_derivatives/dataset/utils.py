@@ -1,7 +1,4 @@
-import json
 from collections import defaultdict
-from pathlib import Path
-from typing import Union
 
 DATASET_DESCRIPTION_KEYS = {
     "required": ["Name", "BIDSVersion"],
@@ -25,7 +22,7 @@ DATASET_DESCRIPTION_KEYS = {
 
 
 def query_dataset_description(
-    dataset_description: Union[Path, str],
+    dataset_description: dict,
     dataset_description_keys: dict = DATASET_DESCRIPTION_KEYS,
 ) -> dict:
     """
@@ -33,8 +30,8 @@ def query_dataset_description(
 
     Parameters
     ----------
-    dataset_description : Union[Path, str]
-        Path to the dataset description json file.
+    dataset_description : dict
+        The dataset description.
     dataset_description_keys : dict, optional
         Dictionary of keys to query, by default DATASET_DESCRIPTION_KEYS
 
@@ -45,13 +42,7 @@ def query_dataset_description(
         existence in the dataset description.
     """
     query = defaultdict(dict)
-    dataset_description = Path(dataset_description)
-    if not dataset_description.exists():
-        return False
-    with open(dataset_description, "r") as f:
-        dataset_description_dict = json.load(f)
-        for requirement, keys in dataset_description_keys.items():
-            for key in keys:
-
-                query[requirement][key] = key in dataset_description_dict
+    for requirement, keys in dataset_description_keys.items():
+        for key in keys:
+            query[requirement][key] = key in dataset_description
     return query
