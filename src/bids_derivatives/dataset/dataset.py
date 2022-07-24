@@ -1,5 +1,4 @@
 import json
-import logging
 from pathlib import Path
 from typing import Union
 
@@ -8,7 +7,7 @@ from bids_derivatives.dataset.messages import (
     DATASET_DESCRIPTION_MESSAGES,
 )
 from bids_derivatives.dataset.utils import query_dataset_description
-from bids_derivatives.utils.logs import LOGGER_CONFIG
+from bids_derivatives.utils.logs import set_logger
 
 
 class BIDSDerivative:
@@ -18,18 +17,10 @@ class BIDSDerivative:
         self, base_directory: Union[str, Path], verbosity: Union[str, int] = 0
     ) -> None:
         self.base_directory = self.validate_base_directory(base_directory)
-        self.logger = self.set_logger(verbosity=verbosity)
+        self.logger = set_logger(name=str(self), verbosity=verbosity)
 
-    def set_logger(self, verbosity: Union[str, int] = 0):
-        logger = logging.getLogger(__name__)
-        logging.basicConfig(**LOGGER_CONFIG)
-        verbosity = (
-            getattr(logging, verbosity.upper(), None)
-            if isinstance(verbosity, str)
-            else verbosity
-        )
-        logger.setLevel(verbosity)
-        return logger
+    def __repr__(self):
+        return f"{self.analysis_title} derivatives query"
 
     def validate_base_directory(
         self, base_directory: Union[str, Path]
@@ -77,3 +68,10 @@ class BIDSDerivative:
         Get the dataset description.
         """
         return self.get_dataset_description()
+
+    @property
+    def analysis_title(self) -> str:
+        """
+        Get the analysis title.
+        """
+        return self.base_directory.name.capitalize()
