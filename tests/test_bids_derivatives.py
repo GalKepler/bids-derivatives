@@ -29,3 +29,14 @@ class BIDSDerivativeTestCase(TestCase):
             derivative = BIDSDerivative(os.path.join(self.TEST_DATA_PATH, key))
             self.assertTrue(isinstance(derivative.analysis_title, str))
             self.assertTrue(derivative.analysis_title.lower() == key)
+
+    def test_representation(self):
+        """
+        Test that the representation is set correctly.
+        """
+        for key in self.TEST_SUBJECTS:
+            derivative = BIDSDerivative(os.path.join(self.TEST_DATA_PATH, key))
+            self.assertTrue(isinstance(str(derivative), str))
+            self.assertTrue(
+                str(derivative).lower() == f"{key} derivatives query"
+            )
