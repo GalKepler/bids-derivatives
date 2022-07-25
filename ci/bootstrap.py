@@ -49,6 +49,7 @@ def main():
     print("Project path: {0}".format(base_path))
 
     jinja = jinja2.Environment(
+        autoescape=True,
         loader=jinja2.FileSystemLoader(templates_path),
         trim_blocks=True,
         lstrip_blocks=True,

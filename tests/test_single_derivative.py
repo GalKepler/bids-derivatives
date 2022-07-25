@@ -38,15 +38,14 @@ class SingleDerivativeTestCase(TestCase):
                 derivative = SingleSubjectDerivative(
                     Path(self.TEST_DATA_PATH) / key, subject
                 )
-            self.assertTrue(derivative.participant_label == subject)
-            self.assertTrue(
-                derivative.path
-                == Path(self.TEST_DATA_PATH) / key / f"sub-{subject}"
-            )
+                num_sessions = info.get("num_sessions")
+                self.assertTrue(derivative.participant_label == subject)
+                self.assertTrue(
+                    derivative.path
+                    == Path(self.TEST_DATA_PATH) / key / f"sub-{subject}"
+                )
 
-            self.assertTrue(
-                len(derivative.sessions) == info.get("num_sessions")
-            )
+                self.assertTrue(len(derivative.sessions) == num_sessions)
 
     def test_full_subject_identfier(self):
         """
