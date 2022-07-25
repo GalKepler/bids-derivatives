@@ -39,7 +39,7 @@ Overview
     :target: https://pre-commit.com/
     :alt: Pre-commit
 
-.. |code-quality| .. image:: https://app.codacy.com/project/badge/Grade/660ff8ebe55d4ecbaa043bc5216a1d30
+.. |code-quality| image:: https://app.codacy.com/project/badge/Grade/660ff8ebe55d4ecbaa043bc5216a1d30
     :target: https://www.codacy.com/gh/GalBenZvi/bids-derivatives/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=GalBenZvi/bids-derivatives&amp;utm_campaign=Badge_Grade
     :alt: Code quality
 
