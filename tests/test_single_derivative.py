@@ -38,6 +38,10 @@ class SingleDerivativeTestCase(TestCase):
                     Path(self.TEST_DATA_PATH) / key, subject
                 )
             self.assertTrue(derivative.participant_label == subject)
+            self.assertTrue(
+                derivative.path
+                == Path(self.TEST_DATA_PATH) / key / f"sub-{subject}"
+            )
 
     def test_invalid_subjects(self):
         """
