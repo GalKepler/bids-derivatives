@@ -7,16 +7,18 @@ Overview
 .. list-table::
     :stub-columns: 1
 
-    * - docs
+    * - Documentation
       - |docs|
-    * - code
-      - |made-with-python|  |code-style|
-    * - tests
+    * - Code
+      - | |made-with-python| |code-style| |imports|
+        | |pre-commit|
+    * - Tests
       - | |github-actions| |requires|
-        | |codecov|
-    * - package
+        | |codecov| |code-quality|
+    * - Packaging
       - | |version| |wheel| |supported-versions| |supported-implementations|
         | |commits-since|
+
 .. |docs| image:: https://readthedocs.org/projects/bids_derivatives/badge/?style=flat
     :target: https://bids_derivatives.readthedocs.io/
     :alt: Documentation Status
@@ -28,6 +30,18 @@ Overview
 .. |code-style| image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/psf/black
     :alt: Code style
+
+.. |imports| image:: https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336
+    :target: https://pycqa.github.io/isort/
+    :alt: Imports
+
+.. |pre-commit| image:: https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white
+    :target: https://pre-commit.com/
+    :alt: Pre-commit
+
+.. |code-quality| .. image:: https://app.codacy.com/project/badge/Grade/660ff8ebe55d4ecbaa043bc5216a1d30
+    :target: https://www.codacy.com/gh/GalBenZvi/bids-derivatives/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=GalBenZvi/bids-derivatives&amp;utm_campaign=Badge_Grade
+    :alt: Code quality
 
 .. |github-actions| image:: https://github.com/GalBenZvi/bids-derivatives/actions/workflows/github-workflow.yml/badge.svg
     :alt: GitHub Actions Build Status
