@@ -16,7 +16,7 @@ Overview
       - | |github-actions| |requires|
         | |codecov| |code-quality| |python-quality|
     * - Packaging
-      - | |version| |wheel| |supported-versions| |supported-implementations|
+      - | |version|
         | |commits-since|
 
 .. |docs| image:: https://readthedocs.org/projects/bids_derivatives/badge/?style=flat
