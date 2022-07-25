@@ -33,11 +33,18 @@ class SingleDerivativeTestCase(TestCase):
         """
         for key, available_subjects in self.TEST_SUBJECTS.items():
             subjects = available_subjects.get("valid")
-            for subject in subjects:
+            for subject, info in subjects.items():
                 derivative = SingleSubjectDerivative(
                     Path(self.TEST_DATA_PATH) / key, subject
                 )
             self.assertTrue(derivative.participant_label == subject)
+            self.assertTrue(
+                derivative.path
+                == Path(self.TEST_DATA_PATH) / key / f"sub-{subject}"
+            )
+            self.assertTrue(
+                len(derivative.sessions) == info.get("num_sessions")
+            )
 
     def test_invalid_subjects(self):
         """
@@ -52,3 +59,5 @@ class SingleDerivativeTestCase(TestCase):
                 )
                 with self.assertRaises(ValueError):
                     single_derivative.get_participant_path()
+                with self.assertRaises(ValueError):
+                    single_derivative.get_available_sessions()
