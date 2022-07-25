@@ -101,3 +101,8 @@ Note, to combine the coverage data from all the tox environments run:
       - ::
 
             PYTEST_ADDOPTS=--cov-append tox
+
+
+.. image:: https://api.codacy.com/project/badge/Grade/ece069e96f1a42a7b2c7188f574ceb5d
+   :alt: Codacy Badge
+   :target: https://app.codacy.com/gh/GalBenZvi/bids-derivatives?utm_source=github.com&utm_medium=referral&utm_content=GalBenZvi/bids-derivatives&utm_campaign=Badge_Grade_Settings
