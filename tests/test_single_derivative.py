@@ -90,3 +90,20 @@ class SingleDerivativeTestCase(TestCase):
                     single_derivative.get_participant_path()
                 with self.assertRaises(ValueError):
                     single_derivative.get_available_sessions()
+
+    def test_base_directory_mismatch_subject(self):
+        """
+        Test that the base directory is set correctly.
+        """
+        for key, available_subjects in self.TEST_SUBJECTS.items():
+            subjects = available_subjects.get("valid")
+            for subject in subjects:
+                base_dir = (
+                    Path(self.TEST_DATA_PATH)
+                    / key
+                    / SUBJECT_TEMPLATE.format(subject=subject)
+                )
+                with self.assertRaises(ValueError):
+                    SingleSubjectDerivative(
+                        base_directory=base_dir, participant_label="sub-error"
+                    )
