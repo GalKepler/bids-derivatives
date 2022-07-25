@@ -63,17 +63,17 @@ Overview
     :alt: PyPI Package latest release
     :target: https://pypi.org/project/bids-derivatives
 
-.. |wheel| image:: https://img.shields.io/pypi/wheel/bids-derivatives.svg
-    :alt: PyPI Wheel
-    :target: https://pypi.org/project/bids-derivatives
+.. .. |wheel| image:: https://img.shields.io/pypi/wheel/bids-derivatives.svg
+..     :alt: PyPI Wheel
+..     :target: https://pypi.org/project/bids-derivatives
 
-.. |supported-versions| image:: https://img.shields.io/pypi/pyversions/bids-derivatives.svg
-    :alt: Supported versions
-    :target: https://pypi.org/project/bids-derivatives
+.. .. |supported-versions| image:: https://img.shields.io/pypi/pyversions/bids-derivatives.svg
+..     :alt: Supported versions
+..     :target: https://pypi.org/project/bids-derivatives
 
-.. |supported-implementations| image:: https://img.shields.io/pypi/implementation/bids-derivatives.svg
-    :alt: Supported implementations
-    :target: https://pypi.org/project/bids-derivatives
+.. .. |supported-implementations| image:: https://img.shields.io/pypi/implementation/bids-derivatives.svg
+..     :alt: Supported implementations
+..     :target: https://pypi.org/project/bids-derivatives
 
 .. |commits-since| image:: https://img.shields.io/github/commits-since/GalBenZvi/bids-derivatives/v0.0.1.svg
     :alt: Commits since latest release
