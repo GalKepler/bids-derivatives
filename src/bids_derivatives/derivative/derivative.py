@@ -1,12 +1,13 @@
 from pathlib import Path
 from typing import Union
 
-import parse
+from parse import parse
 
 from bids_derivatives.derivative.messages import (
     PARTICIPANT_MISMATCH,
     PARTICIPANT_MISSING,
 )
+from bids_derivatives.utils.templates import SESSION_TEMPLATE, SUBJECT_TEMPLATE
 
 
 class SingleSubjectDerivative:
@@ -15,27 +16,23 @@ class SingleSubjectDerivative:
     BIDS-App at a single participant level.
     """
 
-    #: Template
-    SUBJECT_TEMPLATE = "sub-{subject}"
-    SESSION_TEMPLATE = "ses-{session}"
-
     def __init__(
         self,
-        base_dir: Union[str, Path],
+        base_directory: Union[str, Path],
         participant_label: str = None,
         exists: bool = True,
     ):
         self.participant_label = self.validate_participant_label(
             participant_label
         )
-        self.base_directory = self.validate_base_directory(base_dir)
+        self.base_directory = self.validate_base_directory(base_directory)
         self.exists = exists
 
     def get_participant_path(self):
         """
         Get the path to the participant's derivatives directory.
         """
-        result = self.base_directory / self.SUBJECT_TEMPLATE.format(
+        result = self.base_directory / SUBJECT_TEMPLATE.format(
             subject=self.participant_label
         )
         if not result.exists() and self.exists:
@@ -52,9 +49,7 @@ class SingleSubjectDerivative:
         Validate the participant label.
         """
         if participant_label is not None:
-            parser = parse.parse(
-                SingleSubjectDerivative.SUBJECT_TEMPLATE, participant_label
-            )
+            parser = parse(SUBJECT_TEMPLATE, participant_label)
             if parser:
                 participant_label = parser.named.get("subject")
             else:
@@ -85,9 +80,7 @@ class SingleSubjectDerivative:
         """
         base_dir = Path(base_dir)
         base_dir_name = base_dir.name
-        parser = parse.parse(
-            SingleSubjectDerivative.SUBJECT_TEMPLATE, base_dir_name
-        )
+        parser = parse(SUBJECT_TEMPLATE, base_dir_name)
         if parser:
             base_dir = base_dir.parent
             if parser:
@@ -111,7 +104,7 @@ class SingleSubjectDerivative:
         """
         sessions = []
         for session in self.path.iterdir():
-            parser = parse.parse(self.SESSION_TEMPLATE, session.name)
+            parser = parse(SESSION_TEMPLATE, session.name)
             if parser:
                 sessions.append(parser.named.get("session"))
         return list(set(sessions))
