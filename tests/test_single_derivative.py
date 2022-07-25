@@ -2,6 +2,7 @@ from pathlib import Path
 from unittest import TestCase
 
 from bids_derivatives.derivative import SingleSubjectDerivative
+from bids_derivatives.utils.templates.bids import SUBJECT_TEMPLATE
 from tests.fixtures import TEST_DERIVATIVES_PATH, TEST_SUBJECTS
 
 
@@ -42,9 +43,23 @@ class SingleDerivativeTestCase(TestCase):
                 derivative.path
                 == Path(self.TEST_DATA_PATH) / key / f"sub-{subject}"
             )
+
             self.assertTrue(
                 len(derivative.sessions) == info.get("num_sessions")
             )
+
+    def test_full_subject_identfier(self):
+        """
+        Test that the full subject identifier is set correctly.
+        """
+        for key, available_subjects in self.TEST_SUBJECTS.items():
+            subjects = available_subjects.get("valid")
+            for subject, info in subjects.items():
+                derivative = SingleSubjectDerivative(
+                    Path(self.TEST_DATA_PATH) / key,
+                    SUBJECT_TEMPLATE.format(subject=subject),
+                )
+                self.assertTrue(derivative.participant_label == subject)
 
     def test_invalid_subjects(self):
         """
