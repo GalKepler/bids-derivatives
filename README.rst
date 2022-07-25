@@ -9,6 +9,8 @@ Overview
 
     * - docs
       - |docs|
+    * - code
+      - |made-with-python|  |code-style|
     * - tests
       - | |github-actions| |requires|
         | |codecov|
@@ -18,6 +20,14 @@ Overview
 .. |docs| image:: https://readthedocs.org/projects/bids_derivatives/badge/?style=flat
     :target: https://bids_derivatives.readthedocs.io/
     :alt: Documentation Status
+
+.. |made-with-python| image:: https://img.shields.io/badge/Made%20with%20Python-v3.9-blue.svg?style=flat
+    :target: https://www.python.org/
+    :alt: Made with Python
+
+.. |code-style| image:: https://img.shields.io/badge/code%20style-black-000000.svg
+    :target: https://github.com/psf/black
+    :alt: Code style
 
 .. |github-actions| image:: https://github.com/GalBenZvi/bids-derivatives/actions/workflows/github-workflow.yml/badge.svg
     :alt: GitHub Actions Build Status
