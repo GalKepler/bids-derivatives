@@ -19,7 +19,7 @@ Overview
     :target: https://bids_derivatives.readthedocs.io/
     :alt: Documentation Status
 
-.. |github-actions| image:: https://github.com/GalBenZvi/bids-derivatives/actions/workflows/github-actions.yml/badge.svg
+.. |github-actions| image:: https://github.com/GalBenZvi/bids-derivatives/actions/workflows/github-workflow.yml/badge.svg
     :alt: GitHub Actions Build Status
     :target: https://github.com/GalBenZvi/bids-derivatives/actions
 
@@ -27,17 +27,17 @@ Overview
     :alt: Requirements Status
     :target: https://requires.io/github/GalBenZvi/bids-derivatives/requirements/?branch=main
 
-.. |codecov| image:: https://codecov.io/gh/GalBenZvi/bids_derivatives/branch/main/graphs/badge.svg?branch=main
+.. |codecov| image:: https://codecov.io/gh/GalBenZvi/bids-derivatives/branch/main/graphs/badge.svg?branch=main
     :alt: Coverage Status
-    :target: https://codecov.io/github/GalBenZvi/bids_derivatives
+    :target: https://codecov.io/github/GalBenZvi/bids-derivatives
 
-.. |version| image:: https://img.shields.io/pypi/v/bids_derivatives.svg
+.. |version| image:: https://badge.fury.io/py/bids-derivatives.svg
     :alt: PyPI Package latest release
-    :target: https://pypi.org/project/bids_derivatives
+    :target: https://pypi.org/project/bids-derivatives
 
 .. |wheel| image:: https://img.shields.io/pypi/wheel/bids_derivatives.svg
     :alt: PyPI Wheel
-    :target: https://pypi.org/project/bids_derivatives
+    :target: https://pypi.org/project/bids-derivatives
 
 .. |supported-versions| image:: https://img.shields.io/pypi/pyversions/bids_derivatives.svg
     :alt: Supported versions
