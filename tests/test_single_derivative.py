@@ -61,6 +61,20 @@ class SingleDerivativeTestCase(TestCase):
                 )
                 self.assertTrue(derivative.participant_label == subject)
 
+    def test_base_directory_contains_subjects(self):
+        """
+        Test that the base directory contains subjects.
+        """
+        for key, available_subjects in self.TEST_SUBJECTS.items():
+            subjects = available_subjects.get("valid")
+            base_dir = Path(self.TEST_DATA_PATH) / key
+            for subject in subjects:
+                derivative = SingleSubjectDerivative(
+                    base_dir / SUBJECT_TEMPLATE.format(subject=subject),
+                )
+                self.assertTrue(derivative.base_directory == base_dir)
+                self.assertTrue(derivative.participant_label == subject)
+
     def test_invalid_subjects(self):
         """
         Test that the subjects in the test data are invalid.
