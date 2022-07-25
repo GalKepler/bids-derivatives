@@ -35,7 +35,7 @@ Overview
     :alt: PyPI Package latest release
     :target: https://pypi.org/project/bids-derivatives
 
-.. |wheel| image:: https://img.shields.io/pypi/wheel/bids_derivatives.svg
+.. |wheel| image:: https://img.shields.io/pypi/wheel/bids-derivatives.svg
     :alt: PyPI Wheel
     :target: https://pypi.org/project/bids-derivatives
 
