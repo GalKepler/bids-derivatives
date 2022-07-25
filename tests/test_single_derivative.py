@@ -53,7 +53,7 @@ class SingleDerivativeTestCase(TestCase):
         """
         for key, available_subjects in self.TEST_SUBJECTS.items():
             subjects = available_subjects.get("valid")
-            for subject, info in subjects.items():
+            for subject in subjects:
                 derivative = SingleSubjectDerivative(
                     Path(self.TEST_DATA_PATH) / key,
                     SUBJECT_TEMPLATE.format(subject=subject),
