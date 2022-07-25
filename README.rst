@@ -14,7 +14,7 @@ Overview
         | |pre-commit|
     * - Tests
       - | |github-actions| |requires|
-        | |codecov| |code-quality|
+        | |codecov| |code-quality| |python-quality|
     * - Packaging
       - | |version| |wheel| |supported-versions| |supported-implementations|
         | |commits-since|
@@ -40,6 +40,10 @@ Overview
     :alt: Pre-commit
 
 .. |code-quality| image:: https://app.codacy.com/project/badge/Grade/660ff8ebe55d4ecbaa043bc5216a1d30
+    :target: https://lgtm.com/projects/g/GalBenZvi/bids-derivatives/context:python
+    :alt: Code quality: Python
+
+.. |python-quality| image:: https://img.shields.io/lgtm/grade/python/g/GalBenZvi/bids-derivatives.svg
     :target: https://www.codacy.com/gh/GalBenZvi/bids-derivatives/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=GalBenZvi/bids-derivatives&amp;utm_campaign=Badge_Grade
     :alt: Code quality
 
