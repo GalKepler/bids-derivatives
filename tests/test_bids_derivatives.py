@@ -3,6 +3,8 @@ from pathlib import Path
 from unittest import TestCase
 
 from bids_derivatives.dataset import BIDSDerivative
+from bids_derivatives.dataset.messages import DATASET_DESCRIPTION_MESSAGES
+from bids_derivatives.dataset.utils import query_dataset_description
 from bids_derivatives.derivative.derivative import SingleSubjectDerivative
 from tests.fixtures import TEST_DERIVATIVES_PATH, TEST_SUBJECTS
 
@@ -97,3 +99,19 @@ class BIDSDerivativeTestCase(TestCase):
                         SingleSubjectDerivative,
                     )
                 )
+
+    def test_invalid_description(self):
+        derivative = BIDSDerivative(
+            os.path.join(self.TEST_DATA_PATH, "qsiprep_invalid")
+        )
+
+        content = query_dataset_description(derivative.dataset_description)
+        for severity, keys in content.items():
+            missing = [key for key, value in keys.items() if not value]
+            if missing:
+                logging_func = DATASET_DESCRIPTION_MESSAGES[severity]
+                if severity == "required":
+                    with self.assertRaises(ValueError):
+                        logging_func(missing)
+                else:
+                    logging_func(missing)
