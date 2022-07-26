@@ -70,3 +70,10 @@ class BIDSDerivativeTestCase(TestCase):
             derivative = BIDSDerivative(os.path.join(self.TEST_DATA_PATH, key))
             dataset_content = derivative.validate_dataset_description()
             self.assertTrue(all(dataset_content.get("required")))
+
+    def test_available_subjects(self):
+        for key in self.TEST_SUBJECTS:
+            valid_subjects = self.TEST_SUBJECTS[key]["valid"]
+            derivative = BIDSDerivative(os.path.join(self.TEST_DATA_PATH, key))
+            self.assertTrue(isinstance(derivative.subjects, list))
+            self.assertTrue(len(derivative.subjects) == len(valid_subjects))
