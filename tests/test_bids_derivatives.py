@@ -3,6 +3,7 @@ from pathlib import Path
 from unittest import TestCase
 
 from bids_derivatives.dataset import BIDSDerivative
+from bids_derivatives.derivative.derivative import SingleSubjectDerivative
 from tests.fixtures import TEST_DERIVATIVES_PATH, TEST_SUBJECTS
 
 
@@ -72,8 +73,27 @@ class BIDSDerivativeTestCase(TestCase):
             self.assertTrue(all(dataset_content.get("required")))
 
     def test_available_subjects(self):
+        """
+        Test that the available subjects are set correctly.
+        """
         for key in self.TEST_SUBJECTS:
             valid_subjects = self.TEST_SUBJECTS[key]["valid"]
             derivative = BIDSDerivative(os.path.join(self.TEST_DATA_PATH, key))
             self.assertTrue(isinstance(derivative.subjects, list))
             self.assertTrue(len(derivative.subjects) == len(valid_subjects))
+
+    def test_subjects_derivatives(self):
+        """
+        Test that the derivatives are set correctly.
+        """
+        for key in self.TEST_SUBJECTS:
+            valid_subjects = self.TEST_SUBJECTS[key]["valid"]
+            derivative = BIDSDerivative(os.path.join(self.TEST_DATA_PATH, key))
+            self.assertTrue(isinstance(derivative.derivatives, dict))
+            for subject in valid_subjects:
+                self.assertTrue(
+                    isinstance(
+                        derivative.derivatives[subject],
+                        SingleSubjectDerivative,
+                    )
+                )
