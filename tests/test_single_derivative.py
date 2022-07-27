@@ -27,6 +27,7 @@ class SingleDerivativeTestCase(TestCase):
                     derivative.base_directory
                     == Path(self.TEST_DATA_PATH) / key
                 )
+                self.assertTrue(derivative.analysis_title == key)
 
     def test_valid_subjects(self):
         """
@@ -97,12 +98,17 @@ class SingleDerivativeTestCase(TestCase):
         for key, available_subjects in self.TEST_SUBJECTS.items():
             subjects = available_subjects.get("valid")
             for subject in subjects:
-                base_dir = (
-                    Path(self.TEST_DATA_PATH)
-                    / key
-                    / SUBJECT_TEMPLATE.format(subject=subject)
-                )
+                base_dir = Path(self.TEST_DATA_PATH) / key
                 with self.assertRaises(ValueError):
                     SingleSubjectDerivative(
-                        base_directory=base_dir, participant_label="sub-error"
+                        base_directory=base_dir
+                        / SUBJECT_TEMPLATE.format(subject=subject),
+                        participant_label="sub-error",
                     )
+                with self.assertRaises(ValueError):
+                    SingleSubjectDerivative(
+                        base_directory=base_dir / "sub-error",
+                        participant_label=subject,
+                    )
+                with self.assertRaises(ValueError):
+                    SingleSubjectDerivative(base_directory=base_dir)

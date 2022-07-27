@@ -112,6 +112,8 @@ class BIDSDerivativeTestCase(TestCase):
                 logging_func = DATASET_DESCRIPTION_MESSAGES[severity]
                 if severity == "required":
                     with self.assertRaises(ValueError):
+                        logging_func(missing, logger=derivative.logger)
+                    with self.assertRaises(ValueError):
                         logging_func(missing)
                 else:
                     logging_func(missing)
