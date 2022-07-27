@@ -23,7 +23,6 @@ def exec_in_env():
     else:
         bin_path = join(env_path, "bin")
     if not exists(env_path):
-        import subprocess
 
         print("Making bootstrap env in: {0} ...".format(env_path))
         try:
@@ -50,6 +49,7 @@ def main():
     print("Project path: {0}".format(base_path))
 
     jinja = jinja2.Environment(
+        autoescape=True,
         loader=jinja2.FileSystemLoader(templates_path),
         trim_blocks=True,
         lstrip_blocks=True,

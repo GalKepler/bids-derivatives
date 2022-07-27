@@ -95,6 +95,7 @@ class BIDSDerivative:
             if missing:
                 logging_func = DATASET_DESCRIPTION_MESSAGES[severity]
                 logging_func(missing, self.logger)
+        return content
 
     def get_available_subjects(self) -> list:
         """

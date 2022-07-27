@@ -4,6 +4,7 @@ from typing import Union
 from parse import parse
 
 from bids_derivatives.derivative.messages import (
+    PARTICIPANT_COULD_NOT_BE_DETERMINED,
     PARTICIPANT_MISMATCH,
     PARTICIPANT_MISSING,
 )
@@ -70,33 +71,64 @@ class SingleSubjectDerivative:
 
         Returns
         -------
-        _type_
-            _description_
+        Path
+            The validated base directory.
+
+        Raises
+        ------
+        ValueError
+            If the base directory is at the single subject's level
+            and participant label inferred by it does not match the one
+            given as input.
+        """
+        base_dir = Path(base_dir)
+        base_dir_name = base_dir.name
+        root_directory_at_participant = (
+            self.validate_base_dir_participant_mismatch(base_dir_name)
+        )
+        return base_dir.parent if root_directory_at_participant else base_dir
+
+    def validate_base_dir_participant_mismatch(
+        self, base_dir_name: str
+    ) -> bool:
+        """
+        Validate the if base directory is at the single subject's level,
+        the participant label inferred by it matches the one given as input.
+
+        Parameters
+        ----------
+        base_dir_name : str
+            The base directory name.
+
+        Returns
+        -------
+        bool
+            True if the base directory is at the single subject's level,
 
         Raises
         ------
         ValueError
             _description_
+        ValueError
+            _description_
         """
-        base_dir = Path(base_dir)
-        base_dir_name = base_dir.name
         parser = parse(SUBJECT_TEMPLATE, base_dir_name)
-        if parser:
-            base_dir = base_dir.parent
+        if self.participant_label is not None:
             if parser:
                 participant_label = parser.named.get("subject")
-                if self.participant_label is not None:
-                    if self.participant_label != participant_label:
-                        raise ValueError(
-                            PARTICIPANT_MISMATCH.format(
-                                participant_label=self.participant_label,
-                                base_dir_name=participant_label,
-                            )
+                if self.participant_label != participant_label:
+                    raise ValueError(
+                        PARTICIPANT_MISMATCH.format(
+                            participant_label=self.participant_label,
+                            base_dir_name=participant_label,
                         )
-                else:
-                    self.participant_label = parser.named.get("subject")
-
-        return base_dir
+                    )
+        else:
+            if parser:
+                self.participant_label = parser.named.get("subject")
+            else:
+                raise ValueError(PARTICIPANT_COULD_NOT_BE_DETERMINED)
+        return parser
 
     def get_available_sessions(self):
         """
