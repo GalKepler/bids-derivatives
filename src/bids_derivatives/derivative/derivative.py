@@ -34,16 +34,6 @@ class SingleSubjectDerivative:
         self.exists = exists
         self.outputs = validate_outputs(outputs)
 
-    def validate_outputs(self, outputs: Union[dict, list]):
-        """
-        Validate the outputs.
-        """
-        if outputs is not None:
-            if isinstance(outputs, dict):
-                outputs = [outputs]
-            else:
-                pass
-
     def get_participant_path(self):
         """
         Get the path to the participant's derivatives directory.
