@@ -25,14 +25,32 @@ class SingleSubjectDerivative:
         base_directory: Union[str, Path],
         participant_label: str = None,
         exists: bool = True,
-        outputs: Union[dict, list] = None,
+        output_configuration: Union[dict, list] = None,
     ):
+        """
+        Instansiate a `SingleSubjectDerivative` object.
+
+        Parameters
+        ----------
+        base_directory : Union[str, Path]
+            Base directory for the BIDS-app's outputs
+        participant_label : str, optional
+            Participant's label (either sub-xxx or its identifier),
+            by default None
+        exists : bool, optional
+            Whether the participant exists (mainly used for debugging),
+            by default True
+        output_configuration : Union[dict, list], optional
+            A dictionary describing BIDS-app outputs, by default None
+        """
         self.participant_label = self.validate_participant_label(
             participant_label
         )
         self.base_directory = self.validate_base_directory(base_directory)
         self.exists = exists
-        self.outputs = validate_outputs(outputs)
+        self.output_configuration = self.validate_output_format(  # noqa: E501
+            output_configuration
+        )
 
     def get_participant_path(self):
         """
@@ -145,6 +163,44 @@ class SingleSubjectDerivative:
             if parser:
                 sessions.append(parser.named.get("session"))
         return list(set(sessions))
+
+    def validate_output_format(self, output_configuration: dict) -> dict:
+        """
+        If subject has no ses-* subdirectories,
+        move all session-specific outputs to "subject-specific"
+
+        Returns
+        -------
+        dict
+            Transformed (if necessary) output configuration
+        """
+        output_format = validate_outputs(output_configuration)
+        if not self.sessions:
+            for key in output_format.get("session_specific"):
+                val = output_format.get("session_specific").get(key)
+                output_format["subject_spcific"][key] = val
+        return output_format
+
+    def query_subject_specific_outputs(self) -> dict:
+        """
+        Query subject-specific available outputs
+
+        Returns
+        -------
+        dict
+            Dictionary of format {output name: path to output}
+        """
+        # for key in
+
+    def query_outputs(self) -> dict:
+        """
+        Query subject's available outputs
+
+        Returns
+        -------
+        dict
+            Dictionary of format {output name: path to output}
+        """
 
     @property
     def path(self):
