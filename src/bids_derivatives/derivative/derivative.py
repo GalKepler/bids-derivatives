@@ -3,6 +3,7 @@ from typing import Union
 
 from parse import parse
 
+from bids_derivatives.bids_apps.outputs.outputs import validate_outputs
 from bids_derivatives.derivative.messages import (
     PARTICIPANT_COULD_NOT_BE_DETERMINED,
     PARTICIPANT_MISMATCH,
@@ -17,17 +18,31 @@ class SingleSubjectDerivative:
     BIDS-App at a single participant level.
     """
 
+    REQUIRED_KEYS = ["subject_specific"]
+
     def __init__(
         self,
         base_directory: Union[str, Path],
         participant_label: str = None,
         exists: bool = True,
+        outputs: Union[dict, list] = None,
     ):
         self.participant_label = self.validate_participant_label(
             participant_label
         )
         self.base_directory = self.validate_base_directory(base_directory)
         self.exists = exists
+        self.outputs = validate_outputs(outputs)
+
+    def validate_outputs(self, outputs: Union[dict, list]):
+        """
+        Validate the outputs.
+        """
+        if outputs is not None:
+            if isinstance(outputs, dict):
+                outputs = [outputs]
+            else:
+                pass
 
     def get_participant_path(self):
         """
