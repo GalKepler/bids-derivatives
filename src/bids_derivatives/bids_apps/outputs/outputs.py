@@ -34,6 +34,8 @@ def validate_outputs(
     dict
         The validated outputs.
     """
+    if not outputs:
+        return {}
     if isinstance(outputs, Path):  # if the input is a path
         with open(outputs, "r") as f:  # open the file and read content
             outputs = json.load(f)
