@@ -3,7 +3,7 @@ from typing import Union
 
 from parse import parse
 
-from bids_derivatives.bids_apps.outputs.outputs import validate_outputs
+# from bids_derivatives.bids_apps.outputs.outputs import validate_outputs
 from bids_derivatives.derivative.messages import (
     PARTICIPANT_COULD_NOT_BE_DETERMINED,
     PARTICIPANT_MISMATCH,
@@ -174,12 +174,13 @@ class SingleSubjectDerivative:
         dict
             Transformed (if necessary) output configuration
         """
-        output_format = validate_outputs(output_configuration)
-        if not self.sessions:
-            for key in output_format.get("session_specific"):
-                val = output_format.get("session_specific").get(key)
-                output_format["subject_spcific"][key] = val
-        return output_format
+        pass
+        # output_format = validate_outputs(output_configuration)
+        # if not self.sessions:
+        #     for key in output_format.get("session_specific"):
+        #         val = output_format.get("session_specific").get(key)
+        #         output_format["subject_spcific"][key] = val
+        # return output_format
 
     def query_subject_specific_outputs(self) -> dict:
         """

@@ -1,3 +1,5 @@
+from bids_derivatives.bids_apps.outputs.templates import STANDARD_SPACES
+
 OUTPUTS = dict(
     # Anatomicals
     native_T1w=dict(
@@ -35,36 +37,50 @@ OUTPUTS = dict(
         datatype="anat",
         label="gm",
     ),
-    native_T1w=dict(
+    standard_T1w=dict(
         suffix="T1w",
-        space=["MNI152NLin2009cAsym"],
+        space=STANDARD_SPACES,
         datatype="anat",
         desc="preproc",
     ),
-    # "standard_T1w": [
-    #     "anat",
-    #     "space-MNI152NLin2009cAsym_desc-preproc_T1w.nii.gz",
-    # ],
-    # "standard_brain_mask": [
-    #     "anat",
-    #     "space-MNI152NLin2009cAsym_desc-brain_mask.nii.gz",
-    # ],
-    # "standard_parcellation": [
-    #     "anat",
-    #     "space-MNI152NLin2009cAsym_dseg.nii.gz",
-    # ],
-    # "standard_csf": [
-    #     "anat",
-    #     "space-MNI152NLin2009cAsym_label-CSF_probseg.nii.gz",
-    # ],
-    # "standard_gm": [
-    #     "anat",
-    #     "space-MNI152NLin2009cAsym_label-GM_probseg.nii.gz",
-    # ],
-    # "standard_wm": [
-    #     "anat",
-    #     "space-MNI152NLin2009cAsym_label-WM_probseg.nii.gz",
-    # ],
+    standard_brain_mask=dict(
+        suffix="mask",
+        space=STANDARD_SPACES,
+        datatype="anat",
+        desc="brain",
+    ),
+    standard_parcellation=dict(
+        suffix="dseg",
+        space=STANDARD_SPACES,
+        datatype="anat",
+        desc="brain",
+    ),
+    standard_csf=dict(
+        suffix="probseg",
+        space=STANDARD_SPACES,
+        datatype="anat",
+        label="csf",
+    ),
+    standard_wm=dict(
+        suffix="probseg",
+        space=STANDARD_SPACES,
+        datatype="anat",
+        label="wm",
+    ),
+    standard_gm=dict(
+        suffix="probseg",
+        space=STANDARD_SPACES,
+        datatype="anat",
+        label="gm",
+    ),
+    native_to_mni_transform={
+        "suffix": "xfm",
+        "from": "T1w",
+        "to": STANDARD_SPACES,
+        "mode": "image",
+        "datatype": "anat",
+        "extension": ".h5",
+    },
     # "native_to_mni_transform": [
     #     "anat",
     #     "from-T1w_to-MNI152NLin2009cAsym_mode-image_xfm.h5",
