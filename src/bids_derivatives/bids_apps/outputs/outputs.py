@@ -1,8 +1,7 @@
 import json
 from enum import Enum
+from pathlib import Path
 from typing import Union
-
-from pathlib2 import Path
 
 from bids_derivatives.bids_apps.outputs.qsiprep import (
     OUTPUTS as QSIPREP_OUTPUTS,
