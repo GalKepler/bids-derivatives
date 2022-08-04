@@ -1,9 +1,11 @@
 from pathlib import Path
 from typing import Union
 
+from bids.layout.models import Config
+from bids.utils import listify
 from parse import parse
 
-# from bids_derivatives.bids_apps.outputs.outputs import validate_outputs
+from bids_derivatives.bids_apps.outputs.outputs import validate_outputs
 from bids_derivatives.derivative.messages import (
     PARTICIPANT_COULD_NOT_BE_DETERMINED,
     PARTICIPANT_MISMATCH,
@@ -18,14 +20,17 @@ class SingleSubjectDerivative:
     BIDS-App at a single participant level.
     """
 
-    REQUIRED_KEYS = ["subject_specific"]
+    #: Default configurations
+    DEAFULT_CONFIGURATIONS = ["bids", "derivatives"]
 
     def __init__(
         self,
         base_directory: Union[str, Path],
         participant_label: str = None,
         exists: bool = True,
+        layout_configuration: Union[str, dict] = None,
         output_configuration: Union[dict, list] = None,
+        required_keys: list = ["entities"],
     ):
         """
         Instansiate a `SingleSubjectDerivative` object.
@@ -48,8 +53,11 @@ class SingleSubjectDerivative:
         )
         self.base_directory = self.validate_base_directory(base_directory)
         self.exists = exists
-        self.output_configuration = self.validate_output_format(  # noqa: E501
-            output_configuration
+        self.layout_configurations = self.get_configurations(
+            layout_configuration
+        )
+        self.output_configuration = validate_outputs(
+            output_configuration, required_keys=required_keys
         )
 
     def get_participant_path(self):
@@ -164,44 +172,41 @@ class SingleSubjectDerivative:
                 sessions.append(parser.named.get("session"))
         return list(set(sessions))
 
-    def validate_output_format(self, output_configuration: dict) -> dict:
+    def locate_output(self, entities: dict) -> Path:
         """
-        If subject has no ses-* subdirectories,
-        move all session-specific outputs to "subject-specific"
+        Locate the output path for the given entities.
+
+        Parameters
+        ----------
+        entities : dict
+            A dictionary containing the entities to locate the output for.
 
         Returns
         -------
-        dict
-            Transformed (if necessary) output configuration
-        """
-        pass
-        # output_format = validate_outputs(output_configuration)
-        # if not self.sessions:
-        #     for key in output_format.get("session_specific"):
-        #         val = output_format.get("session_specific").get(key)
-        #         output_format["subject_spcific"][key] = val
-        # return output_format
+        Path
+            The output path.
 
-    def query_subject_specific_outputs(self) -> dict:
+        Raises
+        ------
+        ValueError
+            If the output path cannot be determined.
         """
-        Query subject-specific available outputs
+        output_path = self.get_output_path(entities)
+        if not output_path.exists():
+            raise ValueError(
+                "Output path does not exist: {}".format(output_path)
+            )
+        return output_path
 
-        Returns
-        -------
-        dict
-            Dictionary of format {output name: path to output}
+    def get_configurations(self, layout_configuration: Union[str, dict]):
         """
-        # for key in
-
-    def query_outputs(self) -> dict:
+        Get the layout and output configurations.
         """
-        Query subject's available outputs
-
-        Returns
-        -------
-        dict
-            Dictionary of format {output name: path to output}
-        """
+        return [
+            Config.load(config)
+            for config in self.DEAFULT_CONFIGURATIONS
+            + listify(layout_configuration)
+        ]
 
     @property
     def path(self):
@@ -223,3 +228,7 @@ class SingleSubjectDerivative:
         Get the available sessions.
         """
         return self.get_available_sessions()
+
+    @property
+    def configurations(self):
+        return {c.name.lower(): c for c in self.layout_configurations}

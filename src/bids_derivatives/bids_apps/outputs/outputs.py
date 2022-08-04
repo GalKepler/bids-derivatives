@@ -14,7 +14,7 @@ class CommonOutputs(Enum):
 
 def validate_outputs(
     outputs: Union[dict, Path],
-    required_keys: list = ["subject_specific"],
+    required_keys: list = ["entities"],
 ) -> dict:
     """
     Validate that a given input is either a valid dictionary
@@ -26,7 +26,7 @@ def validate_outputs(
         The outputs to validate.
     required_keys : list, optional
         The required keys in the dictionary,
-        by default ["subject_specific"]
+        by default ["entities"]
 
     Returns
     -------
@@ -38,9 +38,10 @@ def validate_outputs(
     if isinstance(outputs, Path):  # if the input is a path
         with open(outputs, "r") as f:  # open the file and read content
             outputs = json.load(f)
-    for key in required_keys:  # for each required key
-        if key not in outputs:  # if the key is not in the dictionary
-            raise ValueError(
-                f"The outputs dictionary must contain the key '{key}'"
-            )
+    for output, values in outputs.items():  # for each required key
+        for key in required_keys:  # if the key is not in the dictionary
+            if key not in values:  # raise an error
+                raise ValueError(
+                    f"The key {key} is required, but isn't available for {output} output."  # noqa: E501
+                )
     return outputs
