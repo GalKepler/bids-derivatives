@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Union
 
 from bids.layout.models import Config
-from bids.utils import listify
+from bids.layout.writing import build_path
 from parse import parse
 
 from bids_derivatives.bids_apps.outputs.outputs import validate_outputs
@@ -20,8 +20,8 @@ class SingleSubjectDerivative:
     BIDS-App at a single participant level.
     """
 
-    #: Default configurations
-    DEAFULT_CONFIGURATIONS = ["bids", "derivatives"]
+    #: Required keys for the output configuration
+    REQUIRED_KEYS = ["entities"]
 
     def __init__(
         self,
@@ -29,8 +29,7 @@ class SingleSubjectDerivative:
         participant_label: str = None,
         exists: bool = True,
         layout_configuration: Union[str, dict] = None,
-        output_configuration: Union[dict, list] = None,
-        required_keys: list = ["entities"],
+        output_configuration: Union[dict, list] = "derivatives",
     ):
         """
         Instansiate a `SingleSubjectDerivative` object.
@@ -53,11 +52,9 @@ class SingleSubjectDerivative:
         )
         self.base_directory = self.validate_base_directory(base_directory)
         self.exists = exists
-        self.layout_configurations = self.get_configurations(
-            layout_configuration
-        )
+        self.layout_configurations = Config.load(layout_configuration)
         self.output_configuration = validate_outputs(
-            output_configuration, required_keys=required_keys
+            output_configuration, required_keys=self.REQUIRED_KEYS
         )
 
     def get_participant_path(self):
@@ -172,41 +169,59 @@ class SingleSubjectDerivative:
                 sessions.append(parser.named.get("session"))
         return list(set(sessions))
 
-    def locate_output(self, entities: dict) -> Path:
+    def locate_output(self, output_values: dict) -> Path:
         """
-        Locate the output path for the given entities.
+        Locate a single output's path.
 
         Parameters
         ----------
-        entities : dict
-            A dictionary containing the entities to locate the output for.
+        output_values : dict
+            A dictionary describing the output.
+            Must contain the following keys:
+            - "entities": A list of entities to locate the output
 
         Returns
         -------
         Path
-            The output path.
-
-        Raises
-        ------
-        ValueError
-            If the output path cannot be determined.
+            The path to the output.
         """
-        output_path = self.get_output_path(entities)
-        if not output_path.exists():
-            raise ValueError(
-                "Output path does not exist: {}".format(output_path)
+        output = {
+            key: val
+            for key, val in output_values.items()
+            if key not in self.REQUIRED_KEYS
+        }  # Duplicate "extra" keys.
+        entities = output_values["entities"].copy()  # Extract base entities
+        entities["subject"] = self.participant_label  # Add subject label
+        if self.sessions:  # If sessions are available, add session label
+            output["path"] = {}
+            for session in self.sessions:
+                entities["session"] = session
+                output_path = self.base_directory / build_path(
+                    entities, self.layout_configurations.default_path_patterns
+                )
+                if output_path.exists():
+                    output["path"][f"ses-{session}"] = output_path
+                else:
+                    output["path"][f"ses-{session}"] = None
+        if not self.sessions or not any(output["path"].values()):
+            entities.pop("session", None)
+            output_path = self.base_directory / build_path(
+                entities, self.layout_configurations.default_path_patterns
             )
-        return output_path
+            if output_path.exists():
+                output["path"] = output_path
+            else:
+                output["path"] = None
+        return output
 
-    def get_configurations(self, layout_configuration: Union[str, dict]):
+    def generate_output_dictionary(self):
         """
-        Get the layout and output configurations.
+        Generate a dictionary of the output configuration.
         """
-        return [
-            Config.load(config)
-            for config in self.DEAFULT_CONFIGURATIONS
-            + listify(layout_configuration)
-        ]
+        return {
+            key: self.locate_output(value)
+            for key, value in self.output_configuration.items()
+        }
 
     @property
     def path(self):
@@ -228,7 +243,3 @@ class SingleSubjectDerivative:
         Get the available sessions.
         """
         return self.get_available_sessions()
-
-    @property
-    def configurations(self):
-        return {c.name.lower(): c for c in self.layout_configurations}
