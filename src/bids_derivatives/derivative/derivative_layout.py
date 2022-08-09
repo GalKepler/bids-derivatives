@@ -2,9 +2,11 @@ from pathlib import Path
 from typing import Union
 
 from bids import BIDSLayout, BIDSLayoutIndexer
-from bids.layout.utils import listify
-from bids_derivatives.derivative.messages import INVALID_ROOT
 from bids.layout.models import Config
+from bids.layout.utils import listify
+
+from bids_derivatives.derivative.messages import INVALID_ROOT
+
 
 class DerivativeLayout(BIDSLayout):
     """
@@ -114,21 +116,22 @@ class DerivativeLayout(BIDSLayout):
                 return True
             else:
                 raise ValueError(INVALID_ROOT)
-        
-    def add_configurations(self,config:Union[Path,str,list,Config]):
+
+    def add_configurations(self, config: Union[Path, str, list, Config]):
         """
         Add new configuration (entities and default_path_patterns)
 
         Parameters
         ----------
         config : Union[Path,str,list,Config]
-            Either path to a configuration json file
+            (1) Path to a configuration json file
             (containing "name", "entities" and "default_path_patterns" keys),
-            or name of an existing configuration (either `bids` or `derivatives`).
+            (2) Name of an existing configuration
+            (either `bids` or `derivatives`).
         """
         for conf in listify(config):
-            if isinstance(conf,str) and conf in self.config:
+            if isinstance(conf, str) and conf in self.config:
                 continue
-            if isinstance(conf,str) or isinstance(Path):
+            if isinstance(conf, str) or isinstance(Path):
                 configuration = Config.load(conf)
                 self.config[configuration.name] = configuration
